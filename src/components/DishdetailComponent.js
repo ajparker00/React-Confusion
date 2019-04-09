@@ -1,70 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
+//card img overay not working
 import {
     Card, CardImg, CardImgOverlay, CardText, CardBody,
     CardTitle
 } from 'reactstrap';
 
 
+function RenderDish({ dish }) {
+    return (
+        <div className="col-12 col-md-5 m-1">
+            <Card>
+                <CardImg top src={dish.image} alt={dish.name} />
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </div>
+    );
 
-class DishDetail extends Component {
+}
+//I had to change comment to comments.  Description and comments are not showing up. Looks like I missing map.  My code is different than the teachers
+function RenderComments({ comments}) {
+    return (
+        <li key={comments.id}>
+            <p>{comments.comment}</p>
+            <p>--{comments.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comments.date)))}
+            </p>
+        </li>
 
-    //assignment 1 part 2
-    constructor(props) {
-        super(props)
+    );
+    
 
-    }
-    renderDish(dish) {
+    return (<div className="col-12 col-md-5 m-1">
+        <h4>
+            "Comments"
+        </h4>
+        <ul className="list-unstyled">
+            {comments}
+        </ul>
+    </div>);
+}
+const DishDetail = (props) => {
+    if (props.dish != null)
         return (
-            <div className="col-12 col-md-5 m-1">
-                <Card>
-                    <CardImg top src={dish.image} alt={dish.name} />
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+            <div className="container">
+                <div className="row">
+                    <RenderDish dish={props.dish} />
+                    <RenderComments comments={props.dish.comment} />
+                </div>
             </div>
         );
 
-    }
-    //assignment 1 part 3
-    renderComments(dish) {
-        const comments = dish.comments.map((comment) => {
-            return (
-                <li key={comment.id}>
-                    <p>{comment.comment}</p>
-                    <p>--{comment.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}
-                    </p>
-                </li>
-
-            );
-        });
-        return (<div className="col-12 col-md-5 m-1">
-            <h4>
-                "Comments"
-        </h4>
-            <ul className="list-unstyled">
-                {comments}
-            </ul>
-        </div>);
-    }
-    render() {
-        if (this.props.selectedDish != null)
-            return (
-                <div className="container">
-                    <div className="row">
-                        {this.renderDish(this.props.selectedDish)}
-                        {this.renderComments(this.props.selectedDish)}
-                    </div>
-                </div>
-            );
-
-        else
-            return (
-                <div></div>
-            );
-    }
-
+    else
+        return (
+            <div></div>
+        );
 }
+
+
 
 export default DishDetail;
