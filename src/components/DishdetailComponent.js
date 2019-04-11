@@ -23,22 +23,24 @@ function RenderDish({ dish }) {
 }
 //I had to change comment to comments.  Description and comments are not showing up. Looks like I missing map.  My code is different than the teachers
 function RenderComments({ comments }) {
-    return (
-        <li key={comments.id}>
-            <p>{comments.comment}</p>
-            <p>--{comments.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comments.date)))}
-            </p>
-        </li>
+	const arrayOfComments = comments;
+    const commentList = arrayOfComments.map((eachComment) => {
+        return (
+            <li key={eachComment.id}>
+                <p>{eachComment.comment}</p>
+                <p>--{eachComment.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(eachComment.date)))}
+                </p>
+            </li>
 
-    );
-
+        );
+    });
 
     return (<div className="col-12 col-md-5 m-1">
         <h4>
             "Comments"
         </h4>
         <ul className="list-unstyled">
-            {comments}
+            {commentList}
         </ul>
     </div>);
 }
