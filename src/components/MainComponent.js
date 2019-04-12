@@ -10,34 +10,21 @@ import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 
+//states are going thru redux store
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
 
 class Main extends Component {
 
   constructor(props) {
     super(props);
-//Removed State bc we are connecting state thru redux
-//Main component needs to get the state from the redux store
-    /* this.state = {
-      dishes: DISHES,
-      comments: COMMENTS,
-      promotions: PROMOTIONS,
-      leaders: LEADERS
-    };
-  }
 
-  onDishSelect(dishId) {
-    this.setState({ selectedDish: dishId });*/
-  }
-
-
-//this are props to the main component by the redux store
-  const mapStateToProps = state => {
-    return {
-      dishes: state.dishes,
-      comments: state.comments,
-      promotions: state.promotions,
-      leaders: state.leaders
-    }
   }
 
   render() {
