@@ -2,9 +2,11 @@ import React from 'react';
 //card img overay not working
 import {
     Card, CardImg, CardText, CardBody,
-    CardTitle, Breadcrumb, BreadcrumbItem
+    CardTitle, Breadcrumb, BreadcrumbItem,
+    Button, Modal, ModalHeader, ModalBody, Row, Col, Label
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 
 
 function RenderDish({ dish }) {
@@ -23,7 +25,7 @@ function RenderDish({ dish }) {
 }
 //I had to change comment to comments.  Description and comments are not showing up. Looks like I missing map.  My code is different than the teachers
 function RenderComments({ comments }) {
-	const arrayOfComments = comments;
+    const arrayOfComments = comments;
     const commentList = arrayOfComments.map((eachComment) => {
         return (
             <li key={eachComment.id}>
@@ -42,8 +44,107 @@ function RenderComments({ comments }) {
         <ul className="list-unstyled">
             {commentList}
         </ul>
+        <React.Fragment>
+            <CommentForm />
+        </React.Fragment>
     </div>);
 }
+
+//Work 3 assignment
+
+
+//task 3
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+
+//task 3 end
+
+class CommentForm extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.toggleModal = this.toggleModal.bind(this);
+
+        this.state = {
+            isModalOpen: false
+        };
+    }
+
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <Button outline color="secondary" onClick={this.toggleModal}>Submit comment</Button>{' '}
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                            <Row className="form-group">
+                                <Label htmlFor="rating" md={12}>Rating</Label>
+                                <Col>
+                                    <Control.select className="form-control" model=".rating" md={12} name="rating" id="rating">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="name" md={12}>Your Name</Label>
+                                <Col md={12}>
+                                    <Control.text model=".name" id="name" name="name"
+                                        placeholder="Name"
+                                        className="form-control"
+                                        validators={{
+                                            required, minLength: minLength(3), maxLength: maxLength(15)
+                                        }}
+                                    />
+                                    <Errors
+                                        className="text-danger"
+                                        model=".name"
+                                        show="touched"
+                                        messages={{
+                                            required: 'Required ',
+                                            minLength: 'Must be greater than 3 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="comment" md={12}>Comment</Label>
+                                <Col md={12}>
+                                    <Control.textarea model=".comment" name="comment" id="comment"
+                                        placeholder="Your Comment"
+                                        rows="6"
+                                        className="form-control" />
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <Col md={12}>
+                                    <Button type="submit" value="submit" color="primary">Submit</Button>
+                                </Col>
+                            </Row>
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </React.Fragment>
+        );
+    }
+}
+
+
 // Updating DishDetail Component and Added breadcrumbs to SPA part 2
 const DishDetail = (props) => {
     if (props.dish != null)
