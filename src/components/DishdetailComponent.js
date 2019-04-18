@@ -24,7 +24,7 @@ function RenderDish({ dish }) {
 
 }
 //I had to change comment to comments.  Description and comments are not showing up. Looks like I missing map.  My code is different than the teachers
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, dishId }) {
     const arrayOfComments = comments;
     const commentList = arrayOfComments.map((eachComment) => {
         return (
@@ -45,7 +45,7 @@ function RenderComments({ comments }) {
             {commentList}
         </ul>
         <React.Fragment>
-            <CommentForm />
+            <CommentForm dishId={dishId} addComment={addComment} />
         </React.Fragment>
     </div>);
 }
@@ -79,6 +79,11 @@ class CommentForm extends React.Component {
         });
     }
 
+    handleSubmit(values) {
+            this.toggleModal();
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    }
+//removed handleSubmit from the Local Form tag and made it it's own function right below toggleModal function  
     render() {
         return (
             <React.Fragment>
@@ -86,7 +91,7 @@ class CommentForm extends React.Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                        <LocalForm>
                             <Row className="form-group">
                                 <Label htmlFor="rating" md={12}>Rating</Label>
                                 <Col>
@@ -162,7 +167,10 @@ const DishDetail = (props) => {
                 </div>
                 <div className="row">
                     <RenderDish dish={props.dish} />
-                    <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments}
+                        addComment={props.addComment}
+                        dishId={props.dish.id}
+                    />
                 </div>
             </div>
         );
