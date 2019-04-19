@@ -25,7 +25,7 @@ function RenderDish({ dish }) {
 
 }
 //I had to change comment to comments.  Description and comments are not showing up. Looks like I missing map.  My code is different than the teachers
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
     const arrayOfComments = comments;
     const commentList = arrayOfComments.map((eachComment) => {
         return (
@@ -46,8 +46,7 @@ function RenderComments({ comments, addComment, dishId }) {
             {commentList}
         </ul>
         <React.Fragment>
-            <CommentForm dishId={dishId} addComment={addComment} />
-        </React.Fragment>
+            <CommentForm dishId={dishId} postComment={postComment} />        </React.Fragment>
     </div>);
 }
 
@@ -82,7 +81,7 @@ class CommentForm extends React.Component {
 
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     }
     //removed handleSubmit from the Local Form tag and made it it's own function right below toggleModal function  
     render() {
@@ -187,7 +186,7 @@ const DishDetail = (props) => {
                 <div className="row">
                     <RenderDish dish={props.dish} />
                     <RenderComments comments={props.comments}
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id}
                     />
                 </div>
